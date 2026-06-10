@@ -14,10 +14,10 @@ Level :: struct {
     name: string,
 }
 LEVELS :: []Level{
-        {id = 0, name = "Menu"},
-        {id = 1, name = "Bem Vindo"},
-        {id = 2, name = "Tutorial"},
-    }
+    {id = 0, name = "Menu"},
+    {id = 1, name = "Bem Vindo"},
+    {id = 2, name = "Tutorial"},
+}
 
 // Main Logic
 main :: proc() {
