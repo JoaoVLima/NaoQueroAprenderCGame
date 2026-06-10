@@ -38,7 +38,7 @@ main :: proc() {
         rl.BeginDrawing()
         
         rl.ClearBackground(rl.WHITE)
-        rl.DrawText(GAME_NAME + "asdasda", 12, 12, 20, rl.BLACK)
+        rl.DrawText(GAME_NAME, 12, 12, 20, rl.BLACK)
         
         rl.EndDrawing()
     }
