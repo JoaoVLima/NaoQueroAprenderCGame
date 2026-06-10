@@ -20,9 +20,21 @@ Level :: struct {
     draw_proc: proc(),
 }
 LEVELS := []Level{
-    {id = 0, name = menu.NAME, draw_proc = menu.draw},
-    {id = 1, name = bemvindo.NAME, draw_proc = bemvindo.draw},
-    {id = 2, name = tutorial.NAME, draw_proc = tutorial.draw},
+    {
+        id = 0, 
+        name = menu.NAME, 
+        draw_proc = menu.draw
+    },
+    {
+        id = 1, 
+        name = bemvindo.NAME, 
+        draw_proc = bemvindo.draw
+    },
+    {
+        id = 2, 
+        name = tutorial.NAME, 
+        draw_proc = tutorial.draw
+    },
 }
 
 switch_level :: proc(current: ^Level, next: Level) {
