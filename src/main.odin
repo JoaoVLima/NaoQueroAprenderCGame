@@ -13,7 +13,7 @@ import tutorial "levels/tutorial"
 // -------------
 
 // Global Variables
-GAME_NAME :: "NaoQueroAprenderC"
+GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
 
 // Levels
 LEVELS := []lvl.Level{
@@ -39,10 +39,12 @@ main :: proc() {
     current_level := LEVELS[0]
 
     // Título inicial da janela
-    window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name)
+    window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
+
 
     // Configuração da janela
     rl.InitWindow(1280, 720, window_name)
+    defer rl.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
     rl.SetTargetFPS(60)
 
     // Loop principal do jogo
@@ -66,5 +68,4 @@ main :: proc() {
         // ------------------------
         rl.EndDrawing()
     }
-    rl.CloseWindow()
 }
