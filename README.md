@@ -3,7 +3,7 @@ NaoQueroAprenderCGame, um jogo feito com Odin
 
 ## How to run:
 ```
-odin run src
+odin run .
 ```
 
 ## Dowload the executable:
