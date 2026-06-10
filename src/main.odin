@@ -5,11 +5,11 @@ import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Level Imports
-import lvl "Levels"
+import lvl "levels"
 // -------------
-import bemvindo "Levels/BemVindo"
-import menu "Levels/Menu"
-import tutorial "Levels/Tutorial"
+import bemvindo "levels/bemvindo"
+import menu "levels/menu"
+import tutorial "levels/tutorial"
 // -------------
 
 // Global Variables
