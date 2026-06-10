@@ -29,7 +29,7 @@ main :: proc() {
 
     // Configuração da janela
     rl.InitWindow(1280, 720, window_name)
-    rl.SetTargetFPS(60) // Boa prática na Raylib para evitar uso de 100% da CPU
+    rl.SetTargetFPS(60)
 
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
