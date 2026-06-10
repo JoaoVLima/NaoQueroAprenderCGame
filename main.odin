@@ -20,9 +20,9 @@ Level :: struct {
     draw_proc: proc(),
 }
 LEVELS := []Level{
-    {id = 0, name = "Menu", draw_proc = menu.draw},
-    {id = 1, name = "Bem Vindo", draw_proc = bemvindo.draw},
-    {id = 2, name = "Tutorial", draw_proc = tutorial.draw},
+    {id = 0, name = menu.NAME, draw_proc = menu.draw},
+    {id = 1, name = bemvindo.NAME, draw_proc = bemvindo.draw},
+    {id = 2, name = tutorial.NAME, draw_proc = tutorial.draw},
 }
 
 switch_level :: proc(current: ^Level, next: Level) {
@@ -56,11 +56,10 @@ main :: proc() {
         rl.BeginDrawing()
         // ------------------------
 
-
         rl.ClearBackground(rl.WHITE)
         rl.DrawText(GAME_NAME, 12, 12, 20, rl.BLACK)
         
-        // 3. Chamando a função da fase atual
+        // draw da fase atual
         if current_level.draw_proc != nil {
             current_level.draw_proc()
         }
