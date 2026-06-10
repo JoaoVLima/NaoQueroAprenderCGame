@@ -26,7 +26,9 @@ main :: proc() {
     // Concatenando Strings
     // Usando o alocador temporario (c no inicio para retornar cstring)
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name)
-
+    // para usar o alocador permanente
+    // use o fmt.caprintf e libere memoria com o delete() depois
+    
     // Configuração da janela
     rl.InitWindow(1280, 720, window_name)
     rl.SetTargetFPS(60)
