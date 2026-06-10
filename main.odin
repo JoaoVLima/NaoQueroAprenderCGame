@@ -8,22 +8,20 @@ import rl "vendor:raylib"
 // (Untyped string) constant (::)
 GAME_NAME :: "NaoQueroAprenderC"
 
-// Struct
+// Levels
 Level :: struct {
     id:   u8,
     name: string,
 }
-
-// Main Logic
-main :: proc() {
-    levels :: []Level{
+LEVELS :: []Level{
         {id = 0, name = "Menu"},
         {id = 1, name = "Bem Vindo"},
         {id = 2, name = "Tutorial"},
     }
 
-    // Acessando o índice 2 (Tutorial)
-    current_level := levels[2]
+// Main Logic
+main :: proc() {
+    current_level := LEVELS[1]
 
     // Concatenando Strings
     // Usando o alocador temporario (c no inicio para retornar cstring)
