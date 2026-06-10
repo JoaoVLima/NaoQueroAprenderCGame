@@ -1,5 +1,5 @@
 # NaoQueroAprenderCGame
-NaoQueroAprenderCGame, um jogo feito com Odin
+NaoQueroAprenderCGame, um jogo feito com C++
 
 ## How to run:
 
