@@ -34,12 +34,15 @@ main :: proc() {
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
         rl.BeginDrawing()
-        
+        // ------------------------
+
+
         rl.ClearBackground(rl.WHITE)
         rl.DrawText(GAME_NAME, 12, 12, 20, rl.BLACK)
         
+
+        // ------------------------
         rl.EndDrawing()
     }
-
     rl.CloseWindow()
 }
