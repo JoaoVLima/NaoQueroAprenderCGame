@@ -10,7 +10,6 @@ import menu "Levels/Menu"
 import tutorial "Levels/Tutorial"
 
 // Global Variables
-// (Untyped string) constant (::)
 GAME_NAME :: "NaoQueroAprenderC"
 
 // Levels
@@ -19,6 +18,7 @@ Level :: struct {
     name: string,
     draw_proc: proc(),
 }
+// Levels array
 LEVELS := []Level{
     {
         id = 0, 
@@ -36,7 +36,7 @@ LEVELS := []Level{
         draw_proc = tutorial.draw
     },
 }
-
+// Levels functions
 switch_level :: proc(current: ^Level, next: Level) {
     current^ = next
     title := fmt.ctprintf("%s - %d - %s", GAME_NAME, next.id, next.name)
@@ -48,11 +48,7 @@ main :: proc() {
     current_level := LEVELS[0]
 
     // Título inicial da janela
-    // Concatenando Strings
-    // Usando o alocador temporario (c no inicio para retornar cstring)
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name)
-    // para usar o alocador permanente
-    // use o fmt.caprintf e libere memoria com o delete() depois
 
     // Configuração da janela
     rl.InitWindow(1280, 720, window_name)

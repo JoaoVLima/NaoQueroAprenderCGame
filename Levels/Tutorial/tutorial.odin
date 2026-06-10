@@ -4,6 +4,7 @@ package tutorial
 import fmt "core:fmt"
 import rl "vendor:raylib"
 
+// Global Variables
 NAME :: "Tutorial"
 
 draw :: proc() {

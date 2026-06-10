@@ -4,6 +4,7 @@ package menu
 import fmt "core:fmt"
 import rl "vendor:raylib"
 
+// Global Variables
 NAME :: "Menu"
 
 draw :: proc() {

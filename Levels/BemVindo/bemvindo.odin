@@ -4,6 +4,7 @@ package bemvindo
 import fmt "core:fmt"
 import rl "vendor:raylib"
 
+// Global Variables
 NAME :: "Bem Vindo"
 
 draw :: proc() {
