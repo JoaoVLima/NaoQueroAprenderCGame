@@ -16,7 +16,7 @@ import tutorial "levels/tutorial"
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
 
 // Levels
-LEVELS := []lvl.Level{
+LEVELS := []lvl.Level{ // mutable (:=)
     {
         id = 0, 
         name = menu.NAME, 
