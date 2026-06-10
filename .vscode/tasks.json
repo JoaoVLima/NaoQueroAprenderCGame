@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Odin",
+            "type": "shell",
+            "command": "odin run .",
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Odin",
+            "type": "shell",
+            "command": "odin build .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Odin (Debug)",
+            "type": "shell",
+            "command": "odin build . -debug -o:none",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}
