@@ -5,21 +5,18 @@ import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Level Imports
+import lvl "Levels"
+// -------------
 import bemvindo "Levels/BemVindo"
 import menu "Levels/Menu"
 import tutorial "Levels/Tutorial"
+// -------------
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC"
 
 // Levels
-Level :: struct {
-    id:   u8,
-    name: string,
-    draw_proc: proc(),
-}
-// Levels array
-LEVELS := []Level{
+LEVELS := []lvl.Level{
     {
         id = 0, 
         name = menu.NAME, 
@@ -36,12 +33,6 @@ LEVELS := []Level{
         draw_proc = tutorial.draw
     },
 }
-// Levels functions
-switch_level :: proc(current: ^Level, next: Level) {
-    current^ = next
-    title := fmt.ctprintf("%s - %d - %s", GAME_NAME, next.id, next.name)
-    rl.SetWindowTitle(title)
-}
 
 // Main Logic
 main :: proc() {
@@ -56,9 +47,10 @@ main :: proc() {
 
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
+        // temp, aperta espaco e muda de level
         if rl.IsKeyPressed(.SPACE) {
             next_level := (current_level.id + 1) % 3
-            switch_level(&current_level, LEVELS[next_level])
+            lvl.SwitchLevel(&current_level, LEVELS[next_level], GAME_NAME)
         }
         
         rl.BeginDrawing()
