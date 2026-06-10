@@ -24,20 +24,20 @@
         {
             "label": "Build Odin (Linux)",
             "type": "shell",
-            "command": "odin build . -o:speed -target:linux_amd64",
+            "command": "odin build . -out:${workspaceRootFolderName} -o:speed -target:linux_amd64",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": []
         },
         {
             "label": "Build Odin (Windows)",
             "type": "shell",
-            "command": "odin build . -o:speed -target:windows_amd64",
+            "command": "odin build . -out:${workspaceRootFolderName}.exe -o:speed -target:windows_amd64",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": []
         },
@@ -50,7 +50,7 @@
             ],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": []
         },
