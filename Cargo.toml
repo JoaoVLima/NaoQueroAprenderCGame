@@ -1,0 +1,11 @@
+[package]
+name = "NaoQueroAprenderCGame"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+raylib = "5.5.1"
+
+[[bin]]
+name = "NaoQueroAprenderCGame"
+path = "main.rs"
