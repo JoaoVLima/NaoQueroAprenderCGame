@@ -13,7 +13,7 @@ import tutorial "tutorial"
 
 // Structs
 level :: struct {
-    id:   u8,
+    id: u8, // natural 8bit number
     name: string,
     draw_proc: proc(),
 }

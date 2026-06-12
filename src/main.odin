@@ -5,6 +5,10 @@ import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Imports
+import core "core"
+windowState :: core.windowState
+InitWindow :: core.InitWindow
+CloseWindow :: core.CloseWindow
 import lvl "levels"
 
 // Global Variables
@@ -15,8 +19,8 @@ GAME_VERSION :: "0.0.2"
 main :: proc() {
     window := windowState {
         is_fullscreen = true,
-        width = 0, // Passando 0 o raylib pega a resolução do monitor
-        height = 0,
+        width = 1280,
+        height = 720,
         target_fps = 300, // meh
     }
 
@@ -31,6 +35,19 @@ main :: proc() {
     
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
+        
+        // Keymaps
+        if (rl.IsKeyDown(.LEFT_ALT) || rl.IsKeyDown(.RIGHT_ALT)) && rl.IsKeyPressed(.ENTER) {
+            display_number := rl.GetCurrentMonitor();
+            if rl.IsWindowFullscreen() {
+                // Se já está em Fullscreen, volta para o modo Janela
+                rl.SetWindowSize(1280, 720)
+            } else {
+                // Se está em modo Janela, ativa o Fullscreen
+                rl.ToggleFullscreen()
+            }
+        }
+
         // temp, aperta espaco e muda de level
         if rl.IsKeyPressed(.SPACE) {
             next_level := (current_level.id + 1) % 3
