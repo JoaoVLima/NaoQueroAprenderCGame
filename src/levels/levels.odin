@@ -12,21 +12,21 @@ import tutorial "tutorial"
 // -------------
 
 // Structs
-Level :: struct {
+level :: struct {
     id:   u8,
     name: string,
     draw_proc: proc(),
 }
 
 // Procs
-SwitchLevel :: proc(current: ^Level, next: Level, game_name: string) {
+SwitchLevel :: proc(current: ^level, next: level, game_name: string) {
     current^ = next
     title := fmt.ctprintf("%s - %d - %s", game_name, next.id, next.name)
     rl.SetWindowTitle(title)
 }
 
 // Levels
-LEVELS := []Level{ // mutable (:=)
+LEVELS := []level{ // mutable (:=)
     {
         id = 0, 
         name = menu.NAME, 

@@ -13,18 +13,22 @@ GAME_VERSION :: "0.0.2"
 
 // Main Logic
 main :: proc() {
+    window := windowState {
+        is_fullscreen = true,
+        width = 0, // Passando 0 o raylib pega a resolução do monitor
+        height = 0,
+        target_fps = 300, // meh
+    }
+
+    InitWindow(&window)
+    defer CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
+
     current_level := lvl.LEVELS[0]
 
     // Título inicial da janela
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
-
-
-    // Configuração da janela
-    rl.SetConfigFlags(rl.ConfigFlags{.FULLSCREEN_MODE})
-    rl.InitWindow(0, 0, window_name)
-    defer rl.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
-    rl.SetTargetFPS(300)
-
+    rl.SetWindowTitle(window_name)
+    
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
         // temp, aperta espaco e muda de level
