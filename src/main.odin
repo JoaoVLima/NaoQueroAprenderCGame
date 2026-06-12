@@ -1,66 +1,51 @@
 package game
 
-// Imports
+// Library Imports
 import fmt "core:fmt"
 import rl "vendor:raylib"
 
-// Level Imports
-import lvl "levels"
-// -------------
-import bemvindo "levels/bemvindo"
-import menu "levels/menu"
-import tutorial "levels/tutorial"
-// -------------
+// Imports
+import win "gamecore/window"
+import lvl "game/levels"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
-GAME_VERSION :: "0.0.1" // (Untyped string) constant (::)
-
-// Levels
-LEVELS := []lvl.Level{ // mutable (:=)
-    {
-        id = 0, 
-        name = menu.NAME, 
-        draw_proc = menu.draw
-    },
-    {
-        id = 1, 
-        name = bemvindo.NAME, 
-        draw_proc = bemvindo.draw
-    },
-    {
-        id = 2, 
-        name = tutorial.NAME, 
-        draw_proc = tutorial.draw
-    },
-}
+GAME_VERSION :: "0.0.2"
 
 // Main Logic
 main :: proc() {
-    current_level := LEVELS[0]
+    win.InitWindow()
+    defer win.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
+
+    current_level := lvl.LEVELS[0]
 
     // Título inicial da janela
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
+    rl.SetWindowTitle(window_name)
 
-
-    // Configuração da janela
-    rl.InitWindow(1280, 720, window_name)
-    defer rl.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
-    rl.SetTargetFPS(60)
-
+    
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
+        // Update States
+        win.UpdateWindowSize()
+        
+        // Keymaps
+        if (rl.IsKeyDown(.LEFT_ALT) || rl.IsKeyDown(.RIGHT_ALT)) && rl.IsKeyPressed(.ENTER) {
+            win.ToggleFullscreen(); 
+        }
+
         // temp, aperta espaco e muda de level
         if rl.IsKeyPressed(.SPACE) {
             next_level := (current_level.id + 1) % 3
-            lvl.SwitchLevel(&current_level, LEVELS[next_level], GAME_NAME)
+            lvl.SwitchLevel(&current_level, lvl.LEVELS[next_level], GAME_NAME)
         }
         
         rl.BeginDrawing()
         // ------------------------
+        rl.DrawFPS(10, 10)
 
         rl.ClearBackground(rl.WHITE)
-        rl.DrawText(GAME_NAME, 12, 12, 20, rl.BLACK)
+        rl.DrawText(fmt.ctprintf("%d", win.WINDOW.width), 500, 500, 20, rl.BLACK)
         
         // draw da fase atual
         if current_level.draw_proc != nil {

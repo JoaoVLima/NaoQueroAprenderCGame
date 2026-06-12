@@ -14,10 +14,43 @@
         {
             "label": "Build Odin",
             "type": "shell",
-            "command": "odin build .",
+            "command": "odin build . -o:speed",
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Odin (Linux)",
+            "type": "shell",
+            "command": "odin build . -out:${workspaceRootFolderName} -o:speed -target:linux_amd64",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Odin (Windows)",
+            "type": "shell",
+            "command": "odin build . -out:${workspaceRootFolderName}.exe -o:speed -target:windows_amd64",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Odin (All Platforms)",
+            "type": "shell",
+            "dependsOn": [
+                "Build Odin (Linux)",
+                "Build Odin (Windows)"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
             },
             "problemMatcher": []
         },

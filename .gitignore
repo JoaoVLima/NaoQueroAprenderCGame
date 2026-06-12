@@ -1,0 +1,10 @@
+# Executáveis do Windows e arquivos de build intermediários
+*.obj
+*.exe
+*.pdb
+*.ilk
+
+# Ignorar o executável nativo do Linux gerado pelo Odin
+# Substitua pelo nome exato do seu executável se for diferente do nome da pasta
+NaoQueroAprenderCGame
+${workspaceRootFolderName}
