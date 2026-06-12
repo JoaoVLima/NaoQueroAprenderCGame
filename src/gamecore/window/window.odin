@@ -1,4 +1,4 @@
-package core
+package window
 
 // Library Imports
 import rl "vendor:raylib"
