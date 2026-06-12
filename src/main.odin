@@ -14,14 +14,7 @@ GAME_VERSION :: "0.0.2"
 
 // Main Logic
 main :: proc() {
-    window := win.windowState {
-        is_fullscreen = true,
-        width = 1280,
-        height = 720,
-        target_fps = 300, // meh
-    }
-
-    win.InitWindow(&window)
+    win.InitWindow()
     defer win.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
 
     current_level := lvl.LEVELS[0]
@@ -29,20 +22,16 @@ main :: proc() {
     // Título inicial da janela
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
     rl.SetWindowTitle(window_name)
+
     
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
+        // Update States
+        win.UpdateWindowSize()
         
         // Keymaps
         if (rl.IsKeyDown(.LEFT_ALT) || rl.IsKeyDown(.RIGHT_ALT)) && rl.IsKeyPressed(.ENTER) {
-            display_number := rl.GetCurrentMonitor();
-            if rl.IsWindowFullscreen() {
-                // Se já está em Fullscreen, volta para o modo Janela
-                rl.SetWindowSize(1280, 720)
-            } else {
-                // Se está em modo Janela, ativa o Fullscreen
-                rl.ToggleFullscreen()
-            }
+            win.ToggleFullscreen(); 
         }
 
         // temp, aperta espaco e muda de level
@@ -56,7 +45,7 @@ main :: proc() {
         rl.DrawFPS(10, 10)
 
         rl.ClearBackground(rl.WHITE)
-        rl.DrawText(GAME_NAME, 1000, 1000, 20, rl.BLACK)
+        rl.DrawText(fmt.ctprintf("%d", win.WINDOW.width), 500, 500, 20, rl.BLACK)
         
         // draw da fase atual
         if current_level.draw_proc != nil {

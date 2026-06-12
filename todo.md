@@ -1,5 +1,6 @@
 # ToDo
 
-- [ ] Fazer o jogo iniciar em fullscreen ou windowed
-- [ ] Fazer o menu
-- [ ] Fazer o primeiro cenario
+- Fazer o menu
+- Fazer o primeiro cenario
+- Fazer o primeiro character
+- Fazer o primeiro enemie
