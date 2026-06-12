@@ -5,8 +5,8 @@ import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Imports
-import window "gamecore/window"
-import lvl "levels"
+import win "gamecore/window"
+import lvl "game/levels"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
@@ -14,15 +14,15 @@ GAME_VERSION :: "0.0.2"
 
 // Main Logic
 main :: proc() {
-    window_state := window.windowState {
+    window := win.windowState {
         is_fullscreen = true,
         width = 1280,
         height = 720,
         target_fps = 300, // meh
     }
 
-    window.InitWindow(&window_state)
-    defer window.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
+    win.InitWindow(&window)
+    defer win.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
 
     current_level := lvl.LEVELS[0]
 
