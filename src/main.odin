@@ -9,7 +9,7 @@ import lvl "levels"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
-GAME_VERSION :: "0.0.1" // (Untyped string) constant (::)
+GAME_VERSION :: "0.0.2" // (Untyped string) constant (::)
 
 // Main Logic
 main :: proc() {
