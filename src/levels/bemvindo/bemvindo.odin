@@ -1,7 +1,6 @@
 package bemvindo
 
-// Imports
-import fmt "core:fmt"
+// Library Imports
 import rl "vendor:raylib"
 
 // Global Variables

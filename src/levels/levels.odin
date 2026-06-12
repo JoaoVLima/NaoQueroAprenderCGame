@@ -1,6 +1,6 @@
 package levels
 
-// Imports
+// Library Imports
 import fmt "core:fmt"
 import rl "vendor:raylib"
 
