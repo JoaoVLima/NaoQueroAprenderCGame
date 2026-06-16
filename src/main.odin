@@ -8,6 +8,7 @@ import rl "vendor:raylib"
 import win "gamecore/window"
 import km "gamecore/keymaps"
 import lvl "game/levels"
+import player "game/players"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
@@ -28,7 +29,8 @@ main :: proc() {
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
         // Update States
-        win.UpdateWindowSize()
+        win.UpdateWindowState()
+        player.UpdatePlayerState()
         
         // Keymaps
         km.CheckKeysPressed()
@@ -48,7 +50,7 @@ main :: proc() {
         }
 
         // Player
-        rl.DrawRectangleV({300, 300}, {64,64}, rl.GREEN)
+        player.InitPlayer()
         
         // Enemies
 

@@ -45,7 +45,7 @@ InitWindow :: proc() {
     // rl.InitAudioDevice()
 }
 
-UpdateWindowSize :: proc() {
+UpdateWindowState :: proc() {
     // Check if the user dragged and resized the window
     if rl.IsWindowResized() && !WINDOW.is_fullscreen {
         WINDOW.width = rl.GetScreenWidth()
