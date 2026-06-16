@@ -37,16 +37,21 @@ main :: proc() {
         // ------------------------
         rl.BeginDrawing()
         // ---------------
+        rl.ClearBackground(rl.WHITE)
+
+        // Debug
         rl.DrawFPS(10, 10)
 
-        rl.ClearBackground(rl.WHITE)
-        rl.DrawText(fmt.ctprintf("%d", win.WINDOW.width), 500, 500, 20, rl.BLACK)
-        
-        // draw da fase atual
+        // Current Level
         if current_level.draw != nil {
             current_level.draw()
         }
+
+        // Player
+        rl.DrawRectangleV({300, 300}, {64,64}, rl.GREEN)
         
+        // Enemies
+
         // ---------------
         rl.EndDrawing()
         // ------------------------
