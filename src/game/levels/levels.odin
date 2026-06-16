@@ -15,7 +15,7 @@ import tutorial "tutorial"
 level :: struct {
     id: u8, // natural 8bit number
     name: string,
-    draw_proc: proc(),
+    draw: proc(),
 }
 
 // Procs
@@ -30,17 +30,17 @@ LEVELS := []level{ // mutable (:=)
     {
         id = 0, 
         name = menu.NAME, 
-        draw_proc = menu.draw
+        draw = menu.draw
     },
     {
         id = 1, 
         name = bemvindo.NAME, 
-        draw_proc = bemvindo.draw
+        draw = bemvindo.draw
     },
     {
         id = 2, 
         name = tutorial.NAME, 
-        draw_proc = tutorial.draw
+        draw = tutorial.draw
     },
 }
 

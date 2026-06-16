@@ -6,6 +6,7 @@ import rl "vendor:raylib"
 
 // Imports
 import win "gamecore/window"
+import km "gamecore/keymaps"
 import lvl "game/levels"
 
 // Global Variables
@@ -30,28 +31,24 @@ main :: proc() {
         win.UpdateWindowSize()
         
         // Keymaps
-        if (rl.IsKeyDown(.LEFT_ALT) || rl.IsKeyDown(.RIGHT_ALT)) && rl.IsKeyPressed(.ENTER) {
-            win.ToggleFullscreen(); 
-        }
-
-        // temp, aperta espaco e muda de level
-        if rl.IsKeyPressed(.SPACE) {
-            next_level := (current_level.id + 1) % 3
-            lvl.SwitchLevel(&current_level, lvl.LEVELS[next_level], GAME_NAME)
-        }
+        km.CheckKeysPressed()
         
-        rl.BeginDrawing()
+        // Drawing the frame
         // ------------------------
+        rl.BeginDrawing()
+        // ---------------
         rl.DrawFPS(10, 10)
 
         rl.ClearBackground(rl.WHITE)
         rl.DrawText(fmt.ctprintf("%d", win.WINDOW.width), 500, 500, 20, rl.BLACK)
         
         // draw da fase atual
-        if current_level.draw_proc != nil {
-            current_level.draw_proc()
+        if current_level.draw != nil {
+            current_level.draw()
         }
-        // ------------------------
+        
+        // ---------------
         rl.EndDrawing()
+        // ------------------------
     }
 }
