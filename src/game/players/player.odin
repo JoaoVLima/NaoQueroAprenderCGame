@@ -17,7 +17,7 @@ PLAYER := playerState {
     size = {64, 64},
     position = {5, 5},
     velocity = {0, 0},
-    speed = 2,
+    speed = 1,
     on_screen = false,
 }
 
@@ -37,12 +37,28 @@ RemovePlayer :: proc() {
     PLAYER.on_screen = false
 }
 
+
+// Plano Cartesiano
+//         -y
+//         -2
+//         -1
+// -y -2 -1 0 1 2 +y
+//          1
+//          2
+//         +y
+
 // Movement
 // -------------------
 MoveForward :: proc() {
     PLAYER.position.x += PLAYER.speed
 }
-
-
-// -------------------
+MoveBackward :: proc() {
+    PLAYER.position.x -= PLAYER.speed
+}
+Jump :: proc() {
+    PLAYER.position.y -= PLAYER.speed
+}
+Crouch :: proc() {
+    PLAYER.position.y += PLAYER.speed
+}
 // ---------------------------

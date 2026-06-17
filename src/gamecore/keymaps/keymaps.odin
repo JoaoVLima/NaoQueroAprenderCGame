@@ -22,7 +22,15 @@ action_types :: enum {
 
 actions :: enum {
     TOGGLE_FULLSCREEN,
+    // Player
+    // ----------------
+    // Movement
+    // -------------
     PLAYER_FOWARD,
+    PLAYER_BACKWARD,
+    JUMP,
+    CROUCH,
+    // ----------------
 }
 
 // Global Variables
@@ -30,19 +38,36 @@ KEYMAP :: [actions][1]keyBinds { // 1 keymap per action
     .TOGGLE_FULLSCREEN = {
         { modifier = .LEFT_ALT, key = .ENTER, action = onToggleFullscreen, action_type = .TOGGLE }
     },
+    // Player
+    // ---------------------
+    // Movement
+    // ----------------
     .PLAYER_FOWARD = {
-        { modifier = .KEY_NULL, key = .D, action = onPlayer_Foward, action_type = .HOLD  }
+        { modifier = .KEY_NULL, key = .D, action = onPlayerFoward, action_type = .HOLD  }
     },
+    .PLAYER_BACKWARD = {
+        { modifier = .KEY_NULL, key = .A, action = onPlayerBackward, action_type = .HOLD  }
+    },
+    .JUMP = {
+        { modifier = .KEY_NULL, key = .SPACE, action = onPlayerJump, action_type = .TOGGLE  }
+    },
+    .CROUCH = {
+        { modifier = .KEY_NULL, key = .LEFT_CONTROL, action = onPlayerCrouch, action_type = .HOLD  }
+    },
+    // ---------------------
 }
 
 // Actions
-onToggleFullscreen :: proc() {
-    win.ToggleFullscreen()
-}
+// ---------------------------
+onToggleFullscreen :: win.ToggleFullscreen
+// Player
+// -------------------
+onPlayerFoward :: player.MoveForward
+onPlayerBackward :: player.MoveBackward
+onPlayerJump :: player.Jump
+onPlayerCrouch :: player.Crouch
+// ---------------------------
 
-onPlayer_Foward :: proc() {
-    player.MoveForward()
-}
 
 // Procs
 CheckKeysPressed :: proc() {
