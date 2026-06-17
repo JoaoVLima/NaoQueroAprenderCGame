@@ -2,14 +2,20 @@ package player
 
 // Library Imports
 import rl "vendor:raylib"
+import gamecore "../../gamecore"
 
 // Structs
 playerState :: struct {
     size: rl.Vector2,
     position: rl.Vector2,
     velocity: rl.Vector2,
+    gravity: f32,
     speed: f32,
+    jump_force: f32,
     on_screen: bool,
+    on_ground: bool,
+    is_jumping: bool,
+    is_crouching: bool,
 }
 
 // Global Variables
@@ -17,8 +23,13 @@ PLAYER := playerState {
     size = {64, 64},
     position = {5, 5},
     velocity = {0, 0},
+    gravity = 0,
     speed = 1000,
+    jump_force = 800,
     on_screen = false,
+    on_ground = false,
+    is_jumping = false,
+    is_crouching = false,
 }
 
 // Procs
@@ -29,7 +40,7 @@ InitPlayer :: proc() {
 
 Draw :: proc() {
     if PLAYER.on_screen {
-        rl.DrawRectangleV(PLAYER.position, PLAYER.size,  rl.GREEN)
+        rl.DrawRectangleV(PLAYER.position, PLAYER.size, rl.GREEN)
     }
 }
 
@@ -40,12 +51,41 @@ RemovePlayer :: proc() {
 // Velocity
 // -------------------
 ResetVelocity :: proc() {
-    PLAYER.velocity = {0, 0}
-}
-ApplyVelocity :: proc() {
-    PLAYER.position += PLAYER.velocity * rl.GetFrameTime()
+    // Resets only horizontal velocity every frame
+    // Vertical velocity is preserved across frames so jump carries upward over time
+    PLAYER.velocity.x = 0
 }
 
+// Called once per fixed timestep (every 1/60s) from the game loop accumulator
+// Uses FIXED_DT instead of GetFrameTime() so physics is framerate independent
+// and deterministic — same result at 10fps or 10000fps
+UpdatePositionState :: proc() {
+    // Gravity accumulates over time (+=) so the player accelerates downward
+    // like real gravity. Resets to 0 on landing.
+    PLAYER.gravity += gamecore.GRAVITY * gamecore.FIXED_DT
+
+    // Peak of jump detection — when gravity crosses 0 the player stopped going up
+    // and is now falling. is_jumping becomes false so fall animation can trigger.
+    if PLAYER.is_jumping && PLAYER.gravity >= 0 {
+        PLAYER.is_jumping = false
+    }
+
+    // Vertical movement is driven by gravity alone after jump sets it
+    // velocity.y is only used for horizontal movement
+    PLAYER.position.x += PLAYER.velocity.x * gamecore.FIXED_DT
+    PLAYER.position.y += PLAYER.gravity    * gamecore.FIXED_DT
+
+    // Ground collision — clamp position and stop gravity
+    GROUND_Y :: f32(600)
+    if PLAYER.position.y + PLAYER.size.y >= GROUND_Y {
+        PLAYER.position.y = GROUND_Y - PLAYER.size.y
+        PLAYER.gravity    = 0
+        PLAYER.on_ground  = true
+        PLAYER.is_jumping = false
+    } else {
+        PLAYER.on_ground = false
+    }
+}
 
 // Plano Cartesiano
 //         -y
@@ -76,9 +116,31 @@ MoveBackward :: proc() {
     PLAYER.velocity.x -= PLAYER.speed
 }
 Jump :: proc() {
-    PLAYER.velocity.y -= PLAYER.speed
+    // Only allow jumping when on the ground
+    // Sets gravity to a large negative value so the player shoots upward
+    // Gravity then naturally decelerates the jump and pulls the player back down
+    // This feels like a real jump because the arc is smooth, not instant
+    if PLAYER.on_ground {
+        PLAYER.gravity    = -PLAYER.jump_force
+        PLAYER.on_ground  = false
+        PLAYER.is_jumping = true
+    }
 }
 Crouch :: proc() {
-    PLAYER.velocity.y += PLAYER.speed
+    // When crouching, halve the player height and push position down
+    // so the top of the player stays in place instead of the bottom
+    if !PLAYER.is_crouching {
+        PLAYER.size.y        = PLAYER.size.y / 2
+        PLAYER.position.y   += PLAYER.size.y   // compensate so feet stay on ground
+        PLAYER.is_crouching  = true
+    }
+}
+StandUp :: proc() {
+    // Restore original height and pull position back up
+    if PLAYER.is_crouching {
+        PLAYER.position.y   -= PLAYER.size.y   // compensate before doubling
+        PLAYER.size.y        = PLAYER.size.y * 2
+        PLAYER.is_crouching  = false
+    }
 }
 // ---------------------------

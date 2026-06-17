@@ -5,6 +5,7 @@ import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Imports
+import gamecore "gamecore"
 import win "gamecore/window"
 import km "gamecore/keymaps"
 import lvl "game/levels"
@@ -27,6 +28,11 @@ main :: proc() {
     
     player.InitPlayer()
 
+    // Accumulator holds leftover time between frames
+    // Each frame we add the real elapsed time, then drain it in fixed 1/60s chunks
+    // This decouples physics from render FPS
+    accumulator: f32 = 0.0
+
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
         player.ResetVelocity()
@@ -35,9 +41,32 @@ main :: proc() {
         km.CheckKeysPressed()
 
         // Update States
+        // ------------------------
         win.UpdateWindowState()
-        player.ApplyVelocity()
 
+        // Spiral of death prevention:
+        // If the game froze (alt-tab, debugger breakpoint, heavy load),
+        // GetFrameTime() could return a huge value like 5.0s, which would
+        // make the inner loop run 300 times in one frame and freeze again.
+        // Clamping to 0.25s means at worst 15 physics steps per frame.
+        if accumulator > 0.25 {
+            accumulator = 0.25
+        }
+        accumulator += rl.GetFrameTime()
+
+        // Drain the accumulator in fixed 1/60s steps
+        // At 60fps:   runs exactly once per frame
+        // At 120fps:  runs every other frame
+        // At 30fps:   runs twice per frame
+        // Physics result is always the same regardless
+        for accumulator >= gamecore.FIXED_DT {
+            player.UpdatePositionState()
+            // enemy.UpdatePositionState() <- enemies go here, same fixed step
+            accumulator -= gamecore.FIXED_DT
+        }
+
+
+        // ------------------------
         
         // Drawing the frame
         // ------------------------
@@ -47,8 +76,25 @@ main :: proc() {
 
         // Debug
         rl.DrawFPS(10, 10)
-        rl.DrawText(fmt.ctprintf("Player:\nposition: %f,%f\nvelocity: %f,%f", player.PLAYER.position.x, player.PLAYER.position.y, player.PLAYER.velocity.x, player.PLAYER.velocity.y), 444, 444, 20, rl.DARKGRAY)
-
+        rl.DrawText(
+            fmt.ctprintf(
+                "Player:\n  position:   %.1f, %.1f\n  size:   %.1f, %.1f\n  velocity:   %.1f, %.1f\n  gravity:    %.1f\n  speed:      %.1f\n  jump_force: %.1f\n  on_screen:  %v\n  on_ground:  %v\n  is_jumping: %v\n  is_crouching: %v",
+                player.PLAYER.position.x,
+                player.PLAYER.position.y,
+                player.PLAYER.size.x,
+                player.PLAYER.size.y,
+                player.PLAYER.velocity.x,
+                player.PLAYER.velocity.y,
+                player.PLAYER.gravity,
+                player.PLAYER.speed,
+                player.PLAYER.jump_force,
+                player.PLAYER.on_screen,
+                player.PLAYER.on_ground,
+                player.PLAYER.is_jumping,
+                player.PLAYER.is_crouching
+            ),
+            400, 400, 20, rl.DARKGRAY,
+        )
         // Current Level
         if current_level.draw != nil {
             current_level.draw()
