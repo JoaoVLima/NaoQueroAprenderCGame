@@ -24,16 +24,20 @@ main :: proc() {
     // Título inicial da janela
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
     rl.SetWindowTitle(window_name)
-
     
+    player.InitPlayer()
+
     // Loop principal do jogo
     for !rl.WindowShouldClose() {
-        // Update States
-        win.UpdateWindowState()
-        player.UpdatePlayerState()
-        
+        player.ResetVelocity()
+
         // Keymaps
         km.CheckKeysPressed()
+
+        // Update States
+        win.UpdateWindowState()
+        player.ApplyVelocity()
+
         
         // Drawing the frame
         // ------------------------
@@ -43,6 +47,7 @@ main :: proc() {
 
         // Debug
         rl.DrawFPS(10, 10)
+        rl.DrawText(fmt.ctprintf("Player:\nposition: %f,%f\nvelocity: %f,%f", player.PLAYER.position.x, player.PLAYER.position.y, player.PLAYER.velocity.x, player.PLAYER.velocity.y), 444, 444, 20, rl.DARKGRAY)
 
         // Current Level
         if current_level.draw != nil {
@@ -50,8 +55,8 @@ main :: proc() {
         }
 
         // Player
-        player.InitPlayer()
-        
+        player.Draw()
+                
         // Enemies
 
         // ---------------
