@@ -36,9 +36,9 @@ main :: proc() {
     // This decouples physics from render FPS
     accumulator: f32 = 0.0
 
-    // Loop principal do jogo
+    // Main game loop
     for !rl.WindowShouldClose() {
-        player.ResetVelocity()
+        player.ResetVelocity() // Slow Down the player velocity
 
         // Keymaps
         km.CheckKeysPressed()
@@ -58,9 +58,9 @@ main :: proc() {
         accumulator += rl.GetFrameTime()
 
         // Drain the accumulator in fixed 1/60s steps
-        // At 60fps:   runs exactly once per frame
-        // At 120fps:  runs every other frame
-        // At 30fps:   runs twice per frame
+        // At 60fps: runs exactly once per frame
+        // At 120fps: runs every other frame
+        // At 30fps: runs twice per frame
         // Physics result is always the same regardless
         for accumulator >= gamecore.FIXED_DT {
             player.UpdatePositionState()
