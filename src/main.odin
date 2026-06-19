@@ -1,4 +1,6 @@
 package game
+// Here is were the magic happens,
+// this is the main file that run the game
 
 // Library Imports
 import fmt "core:fmt"
@@ -18,14 +20,15 @@ GAME_VERSION :: "0.0.3"
 // Main Logic
 main :: proc() {
     win.InitWindow()
-    defer win.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
+    defer win.CloseWindow() // defer makes the subproc be executed at the end of this proc (Pilha - LIFO: Last In, First Out)
 
     current_level := lvl.LEVELS[0]
 
-    // Título inicial da janela
-    window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
+    // Window Title
+    window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" return type cstring // "t" temporary alocator 
     rl.SetWindowTitle(window_name)
     
+    // Show the player (this will be called only when in level 1)
     player.InitPlayer()
 
     // Accumulator holds leftover time between frames

@@ -79,8 +79,8 @@ UpdatePositionState :: proc() {
     GROUND_Y :: f32(600)
     if PLAYER.position.y + PLAYER.size.y >= GROUND_Y {
         PLAYER.position.y = GROUND_Y - PLAYER.size.y
-        PLAYER.gravity    = 0
-        PLAYER.on_ground  = true
+        PLAYER.gravity = 0
+        PLAYER.on_ground = true
         PLAYER.is_jumping = false
     } else {
         PLAYER.on_ground = false
@@ -121,8 +121,8 @@ Jump :: proc() {
     // Gravity then naturally decelerates the jump and pulls the player back down
     // This feels like a real jump because the arc is smooth, not instant
     if PLAYER.on_ground {
-        PLAYER.gravity    = -PLAYER.jump_force
-        PLAYER.on_ground  = false
+        PLAYER.gravity = -PLAYER.jump_force
+        PLAYER.on_ground = false
         PLAYER.is_jumping = true
     }
 }
@@ -130,17 +130,17 @@ Crouch :: proc() {
     // When crouching, halve the player height and push position down
     // so the top of the player stays in place instead of the bottom
     if !PLAYER.is_crouching {
-        PLAYER.size.y        = PLAYER.size.y / 2
-        PLAYER.position.y   += PLAYER.size.y   // compensate so feet stay on ground
-        PLAYER.is_crouching  = true
+        PLAYER.size.y = PLAYER.size.y / 2
+        PLAYER.position.y += PLAYER.size.y   // compensate so feet stay on ground
+        PLAYER.is_crouching = true
     }
 }
 StandUp :: proc() {
     // Restore original height and pull position back up
     if PLAYER.is_crouching {
-        PLAYER.position.y   -= PLAYER.size.y   // compensate before doubling
-        PLAYER.size.y        = PLAYER.size.y * 2
-        PLAYER.is_crouching  = false
+        PLAYER.position.y -= PLAYER.size.y   // compensate before doubling
+        PLAYER.size.y = PLAYER.size.y * 2
+        PLAYER.is_crouching = false
     }
 }
 // ---------------------------
