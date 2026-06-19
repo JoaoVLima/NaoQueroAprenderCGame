@@ -5,17 +5,28 @@ import rl "vendor:raylib"
 import gamecore "../../gamecore"
 
 // Structs
+lookingAt :: enum {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+}
+
 playerState :: struct {
     size: rl.Vector2,
     position: rl.Vector2,
     velocity: rl.Vector2,
     gravity: f32,
     speed: f32,
+    max_speed: f32,
     jump_force: f32,
+    friction: f32,
     on_screen: bool,
     on_ground: bool,
     is_jumping: bool,
     is_crouching: bool,
+    is_moving: bool,
+    looking_at: lookingAt,
 }
 
 // Global Variables
@@ -24,12 +35,16 @@ PLAYER := playerState {
     position = {5, 5},
     velocity = {0, 0},
     gravity = 0,
-    speed = 1000,
+    speed = 20,
+    max_speed = 1000,
     jump_force = 800,
+    friction = 10,
     on_screen = false,
     on_ground = false,
     is_jumping = false,
     is_crouching = false,
+    is_moving = false,
+    looking_at = .LEFT,
 }
 
 // Procs
@@ -48,12 +63,43 @@ RemovePlayer :: proc() {
     PLAYER.on_screen = false
 }
 
+
+// Plano Cartesiano
+//         -y
+//         -2
+//         -1
+// -x -2 -1 0 1 2 +x
+//          1
+//          2
+//         +y
+
+// Without frame time — speed depends on FPS
+// At 60fps: moves 5 units/frame
+// At 120fps: moves 10 units/frame <- broken!
+// PLAYER.position.x += 5
+
+// With frame time — speed is consistent regardless of FPS
+// At 60fps:  5 * 0.0166 = 0.083 units/frame
+// At 120fps: 5 * 0.0083 = 0.041 units/frame
+// Both = ~5 units/second <- correct
+// PLAYER.position.x += 5 * rl.GetFrameTime()
+
+
 // Velocity
 // -------------------
 ResetVelocity :: proc() {
     // Resets only horizontal velocity every frame
     // Vertical velocity is preserved across frames so jump carries upward over time
-    PLAYER.velocity.x = 0
+    if PLAYER.velocity.x > 0 {
+        PLAYER.velocity.x = max(0, PLAYER.velocity.x - PLAYER.friction)
+        PLAYER.looking_at = .LEFT
+    } else if PLAYER.velocity.x < 0 {
+        PLAYER.velocity.x = min(0, PLAYER.velocity.x + PLAYER.friction)
+        PLAYER.looking_at = .RIGHT
+    } else {
+        PLAYER.is_moving = false
+    }
+
 }
 
 // Called once per fixed timestep (every 1/60s) from the game loop accumulator
@@ -87,33 +133,15 @@ UpdatePositionState :: proc() {
     }
 }
 
-// Plano Cartesiano
-//         -y
-//         -2
-//         -1
-// -x -2 -1 0 1 2 +x
-//          1
-//          2
-//         +y
-
-// Without frame time — speed depends on FPS
-// At 60fps: moves 5 units/frame
-// At 120fps: moves 10 units/frame <- broken!
-// PLAYER.position.x += 5
-
-// With frame time — speed is consistent regardless of FPS
-// At 60fps:  5 * 0.0166 = 0.083 units/frame
-// At 120fps: 5 * 0.0083 = 0.041 units/frame
-// Both = ~5 units/second <- correct
-// PLAYER.position.x += 5 * rl.GetFrameTime()
-
 // Movement
 // -------------------
 MoveForward :: proc() {
-    PLAYER.velocity.x += PLAYER.speed
+    PLAYER.velocity.x = min(PLAYER.max_speed, PLAYER.velocity.x + PLAYER.speed)
+    PLAYER.is_moving = true
 }
 MoveBackward :: proc() {
-    PLAYER.velocity.x -= PLAYER.speed
+    PLAYER.velocity.x = max(-PLAYER.max_speed, PLAYER.velocity.x - PLAYER.speed)
+    PLAYER.is_moving = true
 }
 Jump :: proc() {
     // Only allow jumping when on the ground
