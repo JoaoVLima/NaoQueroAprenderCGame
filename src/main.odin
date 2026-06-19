@@ -1,10 +1,13 @@
 package game
+// Here is were the magic happens,
+// this is the main file that run the game
 
 // Library Imports
 import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Imports
+import gamecore "gamecore"
 import win "gamecore/window"
 import km "gamecore/keymaps"
 import lvl "game/levels"
@@ -12,28 +15,61 @@ import player "game/players"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
-GAME_VERSION :: "0.0.3"
+GAME_VERSION :: "0.0.4"
 
 // Main Logic
 main :: proc() {
     win.InitWindow()
-    defer win.CloseWindow() // defer faz ele executar no final da funcao (Pilha - LIFO: Last In, First Out)
+    defer win.CloseWindow() // defer makes the subproc be executed at the end of this proc (Pilha - LIFO: Last In, First Out)
 
     current_level := lvl.LEVELS[0]
 
-    // Título inicial da janela
-    window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" para retornar tipo cstring // "t" alocador temporario 
+    // Window Title
+    window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" return type cstring // "t" temporary alocator 
     rl.SetWindowTitle(window_name)
-
     
-    // Loop principal do jogo
+    // Show the player (this will be called only when in level 1)
+    player.InitPlayer()
+
+    // Accumulator holds leftover time between frames
+    // Each frame we add the real elapsed time, then drain it in fixed 1/60s chunks
+    // This decouples physics from render FPS
+    accumulator: f32 = 0.0
+
+    // Main game loop
     for !rl.WindowShouldClose() {
-        // Update States
-        win.UpdateWindowState()
-        player.UpdatePlayerState()
-        
+        player.ResetVelocity() // Slow Down the player velocity
+
         // Keymaps
         km.CheckKeysPressed()
+
+        // Update States
+        // ------------------------
+        win.UpdateWindowState()
+
+        // Spiral of death prevention:
+        // If the game froze (alt-tab, debugger breakpoint, heavy load),
+        // GetFrameTime() could return a huge value like 5.0s, which would
+        // make the inner loop run 300 times in one frame and freeze again.
+        // Clamping to 0.25s means at worst 15 physics steps per frame.
+        if accumulator > 0.25 {
+            accumulator = 0.25
+        }
+        accumulator += rl.GetFrameTime()
+
+        // Drain the accumulator in fixed 1/60s steps
+        // At 60fps: runs exactly once per frame
+        // At 120fps: runs every other frame
+        // At 30fps: runs twice per frame
+        // Physics result is always the same regardless
+        for accumulator >= gamecore.FIXED_DT {
+            player.UpdatePositionState()
+            // enemy.UpdatePositionState() <- enemies go here, same fixed step
+            accumulator -= gamecore.FIXED_DT
+        }
+
+
+        // ------------------------
         
         // Drawing the frame
         // ------------------------
@@ -43,15 +79,36 @@ main :: proc() {
 
         // Debug
         rl.DrawFPS(10, 10)
-
+        rl.DrawText(
+            fmt.ctprintf(
+                "Player:\n  position:   %.1f, %.1f\n  size:   %.1f, %.1f\n  velocity:   %.1f, %.1f\n  gravity:    %.1f\n  speed:      %.1f\n  max_speed:      %.1f\n  jump_force: %.1f\n  on_screen:  %v\n  on_ground:  %v\n  is_jumping: %v\n  is_crouching: %v\n  is_moving: %v\n  looking_at: %v",
+                player.PLAYER.position.x,
+                player.PLAYER.position.y,
+                player.PLAYER.size.x,
+                player.PLAYER.size.y,
+                player.PLAYER.velocity.x,
+                player.PLAYER.velocity.y,
+                player.PLAYER.gravity,
+                player.PLAYER.speed,
+                player.PLAYER.max_speed,
+                player.PLAYER.jump_force,
+                player.PLAYER.on_screen,
+                player.PLAYER.on_ground,
+                player.PLAYER.is_jumping,
+                player.PLAYER.is_crouching,
+                player.PLAYER.is_moving,
+                player.PLAYER.looking_at,
+            ),
+            500, 200, 20, rl.DARKGRAY,
+        )
         // Current Level
         if current_level.draw != nil {
             current_level.draw()
         }
 
         // Player
-        player.InitPlayer()
-        
+        player.Draw()
+                
         // Enemies
 
         // ---------------
