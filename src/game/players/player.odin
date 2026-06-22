@@ -92,10 +92,10 @@ ResetVelocity :: proc() {
     // Vertical velocity is preserved across frames so jump carries upward over time
     if PLAYER.velocity.x > 0 {
         PLAYER.velocity.x = max(0, PLAYER.velocity.x - PLAYER.friction)
-        PLAYER.looking_at = .LEFT
+        PLAYER.looking_at = .RIGHT
     } else if PLAYER.velocity.x < 0 {
         PLAYER.velocity.x = min(0, PLAYER.velocity.x + PLAYER.friction)
-        PLAYER.looking_at = .RIGHT
+        PLAYER.looking_at = .LEFT
     } else {
         PLAYER.is_moving = false
     }
