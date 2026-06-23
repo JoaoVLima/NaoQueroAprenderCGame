@@ -13,6 +13,7 @@ lookingAt :: enum {
 }
 
 playerState :: struct {
+    // Physics
     size: rl.Vector2,
     position: rl.Vector2,
     velocity: rl.Vector2,
@@ -23,6 +24,9 @@ playerState :: struct {
     crouch_max_speed: f32,
     jump_force: f32,
     friction: f32,
+    // Player Status
+    life: f32,
+    // States
     on_screen: bool,
     on_ground: bool,
     is_jumping: bool,
@@ -34,6 +38,7 @@ playerState :: struct {
 
 // Global Variables
 PLAYER := playerState {
+    // Physics
     size = {64, 64},
     position = {5, 5},
     velocity = {0, 0},
@@ -44,6 +49,9 @@ PLAYER := playerState {
     crouch_max_speed = 400,
     jump_force = 800,
     friction = 10,
+    // Player Status
+    life = 100,
+    // States
     on_screen = false,
     on_ground = false,
     is_jumping = false,
