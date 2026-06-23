@@ -26,6 +26,7 @@ playerState :: struct {
     is_jumping: bool,
     is_crouching: bool,
     is_moving: bool,
+    is_breaking: bool,
     looking_at: lookingAt,
 }
 
@@ -44,6 +45,7 @@ PLAYER := playerState {
     is_jumping = false,
     is_crouching = false,
     is_moving = false,
+    is_breaking = false,
     looking_at = .LEFT,
 }
 
@@ -98,6 +100,12 @@ ResetVelocity :: proc() {
         PLAYER.looking_at = .LEFT
     } else {
         PLAYER.is_moving = false
+        PLAYER.is_breaking = false
+    }
+
+    if (PLAYER.looking_at == .RIGHT && PLAYER.velocity.x > 0) ||
+        (PLAYER.looking_at == .LEFT  && PLAYER.velocity.x < 0) {
+        PLAYER.is_breaking = false
     }
 
 }
@@ -136,10 +144,12 @@ UpdatePositionState :: proc() {
 // Movement
 // -------------------
 MoveForward :: proc() {
+    PLAYER.is_breaking = PLAYER.velocity.x < 0 && PLAYER.on_ground
     PLAYER.velocity.x = min(PLAYER.max_speed, PLAYER.velocity.x + PLAYER.speed)
     PLAYER.is_moving = true
 }
 MoveBackward :: proc() {
+    PLAYER.is_breaking = PLAYER.velocity.x > 0 && PLAYER.on_ground
     PLAYER.velocity.x = max(-PLAYER.max_speed, PLAYER.velocity.x - PLAYER.speed)
     PLAYER.is_moving = true
 }
