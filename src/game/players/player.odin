@@ -19,6 +19,8 @@ playerState :: struct {
     gravity: f32,
     speed: f32,
     max_speed: f32,
+    default_max_speed: f32,
+    crouch_max_speed: f32,
     jump_force: f32,
     friction: f32,
     on_screen: bool,
@@ -38,6 +40,8 @@ PLAYER := playerState {
     gravity = 0,
     speed = 20,
     max_speed = 1000,
+    default_max_speed = 1000,
+    crouch_max_speed = 400,
     jump_force = 800,
     friction = 10,
     on_screen = false,
@@ -136,6 +140,7 @@ UpdatePositionState :: proc() {
         PLAYER.gravity = 0
         PLAYER.on_ground = true
         PLAYER.is_jumping = false
+        PLAYER.max_speed = PLAYER.is_crouching ? PLAYER.crouch_max_speed : PLAYER.default_max_speed
     } else {
         PLAYER.on_ground = false
     }
@@ -171,6 +176,7 @@ Crouch :: proc() {
         PLAYER.size.y = PLAYER.size.y / 2
         PLAYER.position.y += PLAYER.size.y   // compensate so feet stay on ground
         PLAYER.is_crouching = true
+        PLAYER.max_speed = PLAYER.on_ground ? PLAYER.crouch_max_speed : PLAYER.max_speed
     }
 }
 StandUp :: proc() {
@@ -179,6 +185,7 @@ StandUp :: proc() {
         PLAYER.position.y -= PLAYER.size.y   // compensate before doubling
         PLAYER.size.y = PLAYER.size.y * 2
         PLAYER.is_crouching = false
+        PLAYER.max_speed = PLAYER.on_ground ? PLAYER.default_max_speed : PLAYER.max_speed
     }
 }
 // ---------------------------
