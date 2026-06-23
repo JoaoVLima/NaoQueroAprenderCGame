@@ -15,7 +15,7 @@ import player "game/players"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
-GAME_VERSION :: "0.0.4"
+GAME_VERSION :: "0.0.5"
 
 // Main Logic
 main :: proc() {
