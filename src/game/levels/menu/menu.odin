@@ -7,5 +7,5 @@ import rl "vendor:raylib"
 NAME :: "Menu"
 
 draw :: proc() {
-    rl.DrawText("Você está no MENU. Pressione ESPAÇO para iniciar.", 100, 100, 20, rl.DARKGRAY)
+    rl.DrawText("Você está no MENU.", 100, 100, 20, rl.DARKGRAY)
 }

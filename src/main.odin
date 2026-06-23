@@ -15,7 +15,7 @@ import player "game/players"
 
 // Global Variables
 GAME_NAME :: "NaoQueroAprenderC" // (Untyped string) constant (::)
-GAME_VERSION :: "0.0.4"
+GAME_VERSION :: "0.0.5"
 
 // Main Logic
 main :: proc() {
@@ -79,28 +79,7 @@ main :: proc() {
 
         // Debug
         rl.DrawFPS(10, 10)
-        rl.DrawText(
-            fmt.ctprintf(
-                "Player:\n  position:   %.1f, %.1f\n  size:   %.1f, %.1f\n  velocity:   %.1f, %.1f\n  gravity:    %.1f\n  speed:      %.1f\n  max_speed:      %.1f\n  jump_force: %.1f\n  on_screen:  %v\n  on_ground:  %v\n  is_jumping: %v\n  is_crouching: %v\n  is_moving: %v\n  looking_at: %v",
-                player.PLAYER.position.x,
-                player.PLAYER.position.y,
-                player.PLAYER.size.x,
-                player.PLAYER.size.y,
-                player.PLAYER.velocity.x,
-                player.PLAYER.velocity.y,
-                player.PLAYER.gravity,
-                player.PLAYER.speed,
-                player.PLAYER.max_speed,
-                player.PLAYER.jump_force,
-                player.PLAYER.on_screen,
-                player.PLAYER.on_ground,
-                player.PLAYER.is_jumping,
-                player.PLAYER.is_crouching,
-                player.PLAYER.is_moving,
-                player.PLAYER.looking_at,
-            ),
-            500, 200, 20, rl.DARKGRAY,
-        )
+        player.DebugDraw(500, 150, 20, rl.DARKGRAY)
         // Current Level
         if current_level.draw != nil {
             current_level.draw()

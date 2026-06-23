@@ -7,5 +7,5 @@ import rl "vendor:raylib"
 NAME :: "Tutorial"
 
 draw :: proc() {
-    rl.DrawText("Você está no Tutorial. Pressione ESPAÇO para iniciar.", 100, 100, 20, rl.DARKGRAY)
+    rl.DrawText("Você está no Tutorial.", 100, 100, 20, rl.DARKGRAY)
 }
