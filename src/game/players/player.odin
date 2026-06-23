@@ -1,6 +1,7 @@
 package player
 
 // Library Imports
+import fmt "core:fmt"
 import rl "vendor:raylib"
 import gamecore "../../gamecore"
 
@@ -18,11 +19,13 @@ playerState :: struct {
     position: rl.Vector2,
     velocity: rl.Vector2,
     gravity: f32,
+    gravity_drag_scalar: f32,
     speed: f32,
     max_speed: f32,
     default_max_speed: f32,
     crouch_max_speed: f32,
     jump_force: f32,
+    crouch_jump_force: f32,
     friction: f32,
     // Player Status
     life: f32,
@@ -42,12 +45,14 @@ PLAYER := playerState {
     size = {64, 64},
     position = {5, 5},
     velocity = {0, 0},
-    gravity = 0,
+    gravity = gamecore.GRAVITY,
+    gravity_drag_scalar = gamecore.GRAVITY_DRAG_SCALAR,
     speed = 20,
     max_speed = 1000,
     default_max_speed = 1000,
     crouch_max_speed = 400,
     jump_force = 800,
+    crouch_jump_force = 650,
     friction = 10,
     // Player Status
     life = 100,
@@ -102,13 +107,14 @@ RemovePlayer :: proc() {
 // Velocity
 // -------------------
 ResetVelocity :: proc() {
-    // Resets only horizontal velocity every frame
-    // Vertical velocity is preserved across frames so jump carries upward over time
+    gravity_drag := 1 + PLAYER.gravity * PLAYER.gravity_drag_scalar
+    effective_friction := PLAYER.friction * gravity_drag
+    
     if PLAYER.velocity.x > 0 {
-        PLAYER.velocity.x = max(0, PLAYER.velocity.x - PLAYER.friction)
+        PLAYER.velocity.x = max(0, PLAYER.velocity.x - effective_friction)
         PLAYER.looking_at = .RIGHT
     } else if PLAYER.velocity.x < 0 {
-        PLAYER.velocity.x = min(0, PLAYER.velocity.x + PLAYER.friction)
+        PLAYER.velocity.x = min(0, PLAYER.velocity.x + effective_friction)
         PLAYER.looking_at = .LEFT
     } else {
         PLAYER.is_moving = false
@@ -128,7 +134,7 @@ ResetVelocity :: proc() {
 UpdatePositionState :: proc() {
     // Gravity accumulates over time (+=) so the player accelerates downward
     // like real gravity. Resets to 0 on landing.
-    PLAYER.gravity += gamecore.GRAVITY * gamecore.FIXED_DT
+    PLAYER.velocity.y += PLAYER.gravity * gamecore.FIXED_DT
 
     // Peak of jump detection — when gravity crosses 0 the player stopped going up
     // and is now falling. is_jumping becomes false so fall animation can trigger.
@@ -139,13 +145,13 @@ UpdatePositionState :: proc() {
     // Vertical movement is driven by gravity alone after jump sets it
     // velocity.y is only used for horizontal movement
     PLAYER.position.x += PLAYER.velocity.x * gamecore.FIXED_DT
-    PLAYER.position.y += PLAYER.gravity    * gamecore.FIXED_DT
+    PLAYER.position.y += PLAYER.velocity.y * gamecore.FIXED_DT
 
     // Ground collision — clamp position and stop gravity
     GROUND_Y :: f32(600)
     if PLAYER.position.y + PLAYER.size.y >= GROUND_Y {
         PLAYER.position.y = GROUND_Y - PLAYER.size.y
-        PLAYER.gravity = 0
+        PLAYER.velocity.y = 0
         PLAYER.on_ground = true
         PLAYER.is_jumping = false
         PLAYER.max_speed = PLAYER.is_crouching ? PLAYER.crouch_max_speed : PLAYER.default_max_speed
@@ -158,12 +164,18 @@ UpdatePositionState :: proc() {
 // -------------------
 MoveForward :: proc() {
     PLAYER.is_breaking = PLAYER.velocity.x < 0 && PLAYER.on_ground
-    PLAYER.velocity.x = min(PLAYER.max_speed, PLAYER.velocity.x + PLAYER.speed)
+    gravity_drag        := 1 + PLAYER.gravity * PLAYER.gravity_drag_scalar
+    effective_speed     := PLAYER.speed     / gravity_drag
+    effective_max_speed := PLAYER.max_speed / gravity_drag
+    PLAYER.velocity.x = min(effective_max_speed, PLAYER.velocity.x + effective_speed)
     PLAYER.is_moving = true
 }
 MoveBackward :: proc() {
     PLAYER.is_breaking = PLAYER.velocity.x > 0 && PLAYER.on_ground
-    PLAYER.velocity.x = max(-PLAYER.max_speed, PLAYER.velocity.x - PLAYER.speed)
+    gravity_drag        := 1 + PLAYER.gravity * PLAYER.gravity_drag_scalar
+    effective_speed     := PLAYER.speed     / gravity_drag
+    effective_max_speed := PLAYER.max_speed / gravity_drag
+    PLAYER.velocity.x = max(-effective_max_speed, PLAYER.velocity.x - effective_speed)
     PLAYER.is_moving = true
 }
 Jump :: proc() {
@@ -172,7 +184,7 @@ Jump :: proc() {
     // Gravity then naturally decelerates the jump and pulls the player back down
     // This feels like a real jump because the arc is smooth, not instant
     if PLAYER.on_ground {
-        PLAYER.gravity = -PLAYER.jump_force
+        PLAYER.velocity.y = PLAYER.is_crouching ? -PLAYER.crouch_jump_force : -PLAYER.jump_force
         PLAYER.on_ground = false
         PLAYER.is_jumping = true
     }
@@ -197,3 +209,7 @@ StandUp :: proc() {
     }
 }
 // ---------------------------
+
+DebugDraw :: proc(x, y, font_size: i32, color: rl.Color) {
+    rl.DrawText(fmt.ctprintf("%#v", PLAYER), x, y, font_size, color)
+}
