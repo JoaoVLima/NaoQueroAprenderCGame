@@ -46,8 +46,8 @@ main :: proc() {
 
         // Update States
         // ------------------------
-        player.UpdateVelocityState()
         window.UpdateWindowState()
+        player.UpdateVelocityState()
 
         // Spiral of death prevention:
         // If the game froze (alt-tab, debugger breakpoint, heavy load),
