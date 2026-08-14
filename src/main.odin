@@ -22,17 +22,17 @@ main :: proc() {
     window.InitWindow()
     defer window.CloseWindow() // defer makes the subproc be executed at the end of this proc (Pilha - LIFO: Last In, First Out)
 
-    gamecore.InitialLoad()
+    gamecore.InitialLoad() // Loading devices, audio, assets, etc
     defer gamecore.CleanLoad()
 
-    current_level := lvl.LEVELS[0]
+    current_level := lvl.LEVELS[0] // Menu
 
     // Window Title
     window_name := fmt.ctprintf("%s - %d - %s", GAME_NAME, current_level.id, current_level.name) // "c" return type cstring // "t" temporary alocator 
     rl.SetWindowTitle(window_name)
     
-    // Show the player (this will be called only when in level 1)
-    player.InitPlayer()
+    // Show the player (this will be called only when in levels)
+    player.RenderPlayer()
 
     // Accumulator holds leftover time between frames
     // Each frame we add the real elapsed time, then drain it in fixed 1/60s chunks
@@ -88,7 +88,7 @@ main :: proc() {
             current_level.draw()
         }
 
-        // Player
+        // Drawing Player if is_rendering
         player.Draw()
                 
         // Enemies

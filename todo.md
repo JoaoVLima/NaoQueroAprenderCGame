@@ -3,8 +3,12 @@
 - Formatar o codigo do jogo
 - Refatorar, se necessario, o codigo do jogo
 - adicionar corrida
+- adicionar o on_screen, pra saber se o player na tela
 - is_jumping nao ta funcionando quando ta caindo
 - adicionar o is_falling que e inverso do is_jumping, apenas por nomeclatura
+- adicionar caiote time
+- jump higher when pressing jump
+- fazer responsivo ???
 - ground ta dentro de player deve ser no level (cada level tem um ground)
 - Fazer a camera acompanhar o player (x, y)
 

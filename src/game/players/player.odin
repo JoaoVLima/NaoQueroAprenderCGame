@@ -68,7 +68,7 @@ PLAYER := playerState {
 
 // Procs
 // ---------------------------
-InitPlayer :: proc() {
+RenderPlayer :: proc() {
     PLAYER.is_rendering = true
 }
 
@@ -78,7 +78,7 @@ Draw :: proc() {
     }
 }
 
-RemovePlayer :: proc() {
+UnrenderPlayer :: proc() {
     PLAYER.is_rendering = false
 }
 
