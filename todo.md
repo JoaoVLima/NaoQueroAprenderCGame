@@ -4,7 +4,6 @@
 - Refatorar, se necessario, o codigo do jogo
 - adicionar corrida
 - adicionar o on_screen, pra saber se o player na tela
-- adicionar o is_falling que e inverso do is_jumping, apenas por nomeclatura
 - adicionar caiote time
 - jump higher when pressing jump
 - adicionar freeze player pra cutscenes

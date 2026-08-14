@@ -5,17 +5,15 @@ import fmt "core:fmt"
 import rl "vendor:raylib"
 
 // Level Imports
-// -------------
 import bemvindo "bemvindo"
 import menu "menu"
 import tutorial "tutorial"
-// -------------
 
 // Structs
 level :: struct {
     id: u8, // natural 8bit number
     name: string,
-    draw: proc(),
+    Draw: proc(),
 }
 
 // Procs
@@ -30,17 +28,17 @@ LEVELS := []level{ // mutable (:=)
     {
         id = 0, 
         name = menu.NAME, 
-        draw = menu.Draw
+        Draw = menu.Draw
     },
     {
         id = 1, 
         name = bemvindo.NAME, 
-        draw = bemvindo.Draw
+        Draw = bemvindo.Draw
     },
     {
         id = 2, 
         name = tutorial.NAME, 
-        draw = tutorial.Draw
+        Draw = tutorial.Draw
     },
 }
 

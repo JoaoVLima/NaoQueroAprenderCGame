@@ -84,8 +84,8 @@ main :: proc() {
         // ---------------
         
         // Current Level
-        if current_level.draw != nil {
-            current_level.draw()
+        if current_level.Draw != nil {
+            current_level.Draw()
         }
 
         // Debug
