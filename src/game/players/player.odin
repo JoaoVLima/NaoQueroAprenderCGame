@@ -48,8 +48,8 @@ PLAYER := playerState {
     gravity = gamecore.GRAVITY,
     gravity_drag = 1 + gamecore.GRAVITY * gamecore.GRAVITY_DRAG_SCALAR,
     speed = 20,
-    max_speed = 1000,
-    default_max_speed = 1000,
+    max_speed = 1000, // Initial Max Speed
+    default_max_speed = 1000, // Initial Max Speed
     crouch_max_speed = 400,
     jump_force = 800,
     crouch_jump_force = 650,
@@ -110,11 +110,11 @@ UpdateVelocityState :: proc() {
     effective_friction := PLAYER.friction * PLAYER.gravity_drag
     
     if PLAYER.velocity.x > 0 {
-        PLAYER.velocity.x = max(0, PLAYER.velocity.x - effective_friction)
         PLAYER.looking_at = .RIGHT
+        PLAYER.velocity.x = max(0, PLAYER.velocity.x - effective_friction)
     } else if PLAYER.velocity.x < 0 {
-        PLAYER.velocity.x = min(0, PLAYER.velocity.x + effective_friction)
         PLAYER.looking_at = .LEFT
+        PLAYER.velocity.x = min(0, PLAYER.velocity.x + effective_friction)
     } else {
         PLAYER.is_moving = false
         PLAYER.is_breaking = false

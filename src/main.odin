@@ -41,13 +41,17 @@ main :: proc() {
 
     // Main game loop
     for !rl.WindowShouldClose() {
+        // Update States Before Keymaps
+        // ------------------------
+        player.UpdateVelocityState()
+        // ------------------------
+        
         // Keymaps
         kmaps.CheckKeysPressed()
 
         // Update States
         // ------------------------
         window.UpdateWindowState()
-        player.UpdateVelocityState()
 
         // Spiral of death prevention:
         // If the game froze (alt-tab, debugger breakpoint, heavy load),
