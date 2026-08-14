@@ -21,7 +21,7 @@
 - Fazer o primeiro enemie
 
 
- 
+- Accumulator no main loop do jogo ta ridiculo, tira aquilo
 
 
 

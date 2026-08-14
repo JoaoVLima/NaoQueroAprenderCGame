@@ -81,15 +81,16 @@ main :: proc() {
         // ------------------------
         rl.BeginDrawing()
         // ---------------
-        rl.ClearBackground(rl.WHITE)
-
-        // Debug
-        rl.DrawFPS(10, 10)
-        player.DebugDraw(500, 150, 20, rl.DARKGRAY)
+        
         // Current Level
         if current_level.draw != nil {
             current_level.draw()
         }
+
+        // Debug
+        rl.DrawFPS(10, 10)
+        player.DebugDraw(500, 150, 20, rl.DARKGRAY)
+        
 
         // Drawing Player if is_rendering
         player.Draw()
