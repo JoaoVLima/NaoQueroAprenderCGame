@@ -8,8 +8,8 @@ import rl "vendor:raylib"
 
 // Imports
 import gamecore "gamecore"
-import win "gamecore/window"
-import km "gamecore/keymaps"
+import window "gamecore/window"
+import kmaps "gamecore/keymaps"
 import lvl "game/levels"
 import player "game/players"
 
@@ -19,8 +19,8 @@ GAME_VERSION :: "0.0.5"
 
 // Main Logic
 main :: proc() {
-    win.InitWindow()
-    defer win.CloseWindow() // defer makes the subproc be executed at the end of this proc (Pilha - LIFO: Last In, First Out)
+    window.InitWindow()
+    defer window.CloseWindow() // defer makes the subproc be executed at the end of this proc (Pilha - LIFO: Last In, First Out)
 
     current_level := lvl.LEVELS[0]
 
@@ -41,11 +41,11 @@ main :: proc() {
         player.ResetVelocity() // Slow Down the player velocity
 
         // Keymaps
-        km.CheckKeysPressed()
+        kmaps.CheckKeysPressed()
 
         // Update States
         // ------------------------
-        win.UpdateWindowState()
+        window.UpdateWindowState()
 
         // Spiral of death prevention:
         // If the game froze (alt-tab, debugger breakpoint, heavy load),

@@ -4,7 +4,7 @@ package keymaps
 import rl "vendor:raylib"
 
 // Imports
-import win "../window"
+import window "../window"
 import player "../../game/players"
 
 // Enum & Structs
@@ -64,7 +64,7 @@ KEYMAP :: [actions][1]keyBinds { // 1 keymap per action
 
 // Actions
 // ---------------------------
-onToggleFullscreen :: win.ToggleFullscreen
+onToggleFullscreen :: window.ToggleFullscreen
 // Player
 // -------------------
 onPlayerFoward :: player.MoveForward
