@@ -40,9 +40,6 @@ InitWindow :: proc() {
     
     rl.InitWindow(width, height, "Inicializando...") 
     rl.SetTargetFPS(WINDOW.target_fps)
-    
-    // Load Game Assets and Devices
-    // rl.InitAudioDevice()
 }
 
 UpdateWindowState :: proc() {
@@ -81,7 +78,5 @@ ToggleFullscreen :: proc() {
 }
 
 CloseWindow :: proc() {
-    // Unload Game Assets and Devices
-    // rl.CloseAudioDevice()
     rl.CloseWindow()
 }

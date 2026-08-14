@@ -30,7 +30,7 @@ playerState :: struct {
     // Player Status
     life: f32,
     // States
-    on_screen: bool,
+    is_rendering: bool,
     on_ground: bool,
     is_jumping: bool,
     is_crouching: bool,
@@ -57,7 +57,7 @@ PLAYER := playerState {
     // Player Status
     life = 100,
     // States
-    on_screen = false,
+    is_rendering = false,
     on_ground = false,
     is_jumping = false,
     is_crouching = false,
@@ -69,17 +69,17 @@ PLAYER := playerState {
 // Procs
 // ---------------------------
 InitPlayer :: proc() {
-    PLAYER.on_screen = true
+    PLAYER.is_rendering = true
 }
 
 Draw :: proc() {
-    if PLAYER.on_screen {
+    if PLAYER.is_rendering {
         rl.DrawRectangleV(PLAYER.position, PLAYER.size, rl.GREEN)
     }
 }
 
 RemovePlayer :: proc() {
-    PLAYER.on_screen = false
+    PLAYER.is_rendering = false
 }
 
 

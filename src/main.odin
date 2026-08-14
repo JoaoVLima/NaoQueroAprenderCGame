@@ -22,6 +22,9 @@ main :: proc() {
     window.InitWindow()
     defer window.CloseWindow() // defer makes the subproc be executed at the end of this proc (Pilha - LIFO: Last In, First Out)
 
+    gamecore.InitialLoad()
+    defer gamecore.CleanLoad()
+
     current_level := lvl.LEVELS[0]
 
     // Window Title
