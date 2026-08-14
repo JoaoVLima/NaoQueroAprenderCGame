@@ -8,6 +8,7 @@ import rl "vendor:raylib"
 
 // Imports
 import gamecore "gamecore"
+import colors "gamecore/colors"
 import window "gamecore/window"
 import kmaps "gamecore/keymaps"
 import lvl "game/levels"
@@ -89,7 +90,7 @@ main :: proc() {
 
         // Debug
         rl.DrawFPS(10, 10)
-        player.DebugDraw(500, 150, 20, rl.DARKGRAY)
+        player.DebugDraw(500, 150, 20, colors.AmericanBrown)
         
 
         // Drawing Player if is_rendering

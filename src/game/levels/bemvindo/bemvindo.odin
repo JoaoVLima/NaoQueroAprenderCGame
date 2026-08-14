@@ -3,11 +3,14 @@ package bemvindo
 // Library Imports
 import rl "vendor:raylib"
 
+// Imports
+import colors "../../../gamecore/colors"
+
 // Global Variables
 NAME :: "Bem Vindo"
 
 
-draw :: proc() {
-    rl.ClearBackground(rl.MAGENTA)
-    rl.DrawText("Você está no Bemvindo.", 100, 100, 20, rl.DARKGRAY)
+Draw :: proc() {
+    rl.ClearBackground(colors.DullRed)
+    rl.DrawText("Você está no Bemvindo.", 100, 100, 20, colors.Revolver)
 }

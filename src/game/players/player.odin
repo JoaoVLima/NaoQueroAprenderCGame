@@ -4,6 +4,7 @@ package player
 import fmt "core:fmt"
 import rl "vendor:raylib"
 import gamecore "../../gamecore"
+import colors "../../gamecore/colors"
 
 // Structs
 lookingAt :: enum {
@@ -74,7 +75,7 @@ RenderPlayer :: proc() {
 
 Draw :: proc() {
     if PLAYER.is_rendering {
-        rl.DrawRectangleV(PLAYER.position, PLAYER.size, rl.GREEN)
+        rl.DrawRectangleV(PLAYER.position, PLAYER.size, colors.Field)
     }
 }
 

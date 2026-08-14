@@ -30,17 +30,17 @@ LEVELS := []level{ // mutable (:=)
     {
         id = 0, 
         name = menu.NAME, 
-        draw = menu.draw
+        draw = menu.Draw
     },
     {
         id = 1, 
         name = bemvindo.NAME, 
-        draw = bemvindo.draw
+        draw = bemvindo.Draw
     },
     {
         id = 2, 
         name = tutorial.NAME, 
-        draw = tutorial.draw
+        draw = tutorial.Draw
     },
 }
 

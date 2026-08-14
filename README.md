@@ -8,7 +8,9 @@ odin run .
 
 ## Dowload the executable:
 
-
+## Colors
+https://lospec.com/palette-list/retrocal-8
+https://www.color-name.com/
 
 ## Sounds
 https://www.myinstants.com/pt/instant/sound-mp3-68193/
