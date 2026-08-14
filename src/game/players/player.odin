@@ -19,7 +19,7 @@ playerState :: struct {
     position: rl.Vector2,
     velocity: rl.Vector2,
     gravity: f32,
-    gravity_drag_scalar: f32,
+    gravity_drag: f32,
     speed: f32,
     max_speed: f32,
     default_max_speed: f32,
@@ -46,14 +46,14 @@ PLAYER := playerState {
     position = {5, 5},
     velocity = {0, 0},
     gravity = gamecore.GRAVITY,
-    gravity_drag_scalar = gamecore.GRAVITY_DRAG_SCALAR,
+    gravity_drag = 1 + gamecore.GRAVITY * gamecore.GRAVITY_DRAG_SCALAR,
     speed = 20,
     max_speed = 1000,
     default_max_speed = 1000,
     crouch_max_speed = 400,
     jump_force = 800,
     crouch_jump_force = 650,
-    friction = 10,
+    friction = 11,
     // Player Status
     life = 100,
     // States
@@ -106,9 +106,8 @@ UnrenderPlayer :: proc() {
 
 // Velocity
 // -------------------
-ResetVelocity :: proc() {
-    gravity_drag := 1 + PLAYER.gravity * PLAYER.gravity_drag_scalar
-    effective_friction := PLAYER.friction * gravity_drag
+UpdateVelocityState :: proc() {
+    effective_friction := PLAYER.friction * PLAYER.gravity_drag
     
     if PLAYER.velocity.x > 0 {
         PLAYER.velocity.x = max(0, PLAYER.velocity.x - effective_friction)
@@ -164,17 +163,15 @@ UpdatePositionState :: proc() {
 // -------------------
 MoveForward :: proc() {
     PLAYER.is_breaking = PLAYER.velocity.x < 0 && PLAYER.on_ground
-    gravity_drag        := 1 + PLAYER.gravity * PLAYER.gravity_drag_scalar
-    effective_speed     := PLAYER.speed     / gravity_drag
-    effective_max_speed := PLAYER.max_speed / gravity_drag
+    effective_speed     := PLAYER.speed     / PLAYER.gravity_drag
+    effective_max_speed := PLAYER.max_speed / PLAYER.gravity_drag
     PLAYER.velocity.x = min(effective_max_speed, PLAYER.velocity.x + effective_speed)
     PLAYER.is_moving = true
 }
 MoveBackward :: proc() {
     PLAYER.is_breaking = PLAYER.velocity.x > 0 && PLAYER.on_ground
-    gravity_drag        := 1 + PLAYER.gravity * PLAYER.gravity_drag_scalar
-    effective_speed     := PLAYER.speed     / gravity_drag
-    effective_max_speed := PLAYER.max_speed / gravity_drag
+    effective_speed     := PLAYER.speed     / PLAYER.gravity_drag
+    effective_max_speed := PLAYER.max_speed / PLAYER.gravity_drag
     PLAYER.velocity.x = max(-effective_max_speed, PLAYER.velocity.x - effective_speed)
     PLAYER.is_moving = true
 }

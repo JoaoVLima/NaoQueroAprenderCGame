@@ -41,13 +41,12 @@ main :: proc() {
 
     // Main game loop
     for !rl.WindowShouldClose() {
-        player.ResetVelocity() // Slow Down the player velocity
-
         // Keymaps
         kmaps.CheckKeysPressed()
 
         // Update States
         // ------------------------
+        player.UpdateVelocityState()
         window.UpdateWindowState()
 
         // Spiral of death prevention:
