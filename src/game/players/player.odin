@@ -34,6 +34,7 @@ playerState :: struct {
     is_rendering: bool,
     on_ground: bool,
     is_jumping: bool,
+    is_falling: bool,
     is_crouching: bool,
     is_moving: bool,
     is_breaking: bool,
@@ -61,6 +62,7 @@ PLAYER := playerState {
     is_rendering = false,
     on_ground = false,
     is_jumping = false,
+    is_falling = false,
     is_crouching = false,
     is_moving = false,
     is_breaking = false,
@@ -136,10 +138,11 @@ UpdatePositionState :: proc() {
     // like real gravity. Resets to 0 on landing.
     PLAYER.velocity.y += PLAYER.gravity * gamecore.FIXED_DT
 
-    // Peak of jump detection — when gravity crosses 0 the player stopped going up
+    // Peak of jump detection — when velocity crosses 0 the player stopped going up
     // and is now falling. is_jumping becomes false so fall animation can trigger.
-    if PLAYER.is_jumping && PLAYER.gravity >= 0 {
+    if PLAYER.is_jumping && PLAYER.velocity.y >= 0 {
         PLAYER.is_jumping = false
+        PLAYER.is_falling = true
     }
 
     // Vertical movement is driven by gravity alone after jump sets it
@@ -154,6 +157,7 @@ UpdatePositionState :: proc() {
         PLAYER.velocity.y = 0
         PLAYER.on_ground = true
         PLAYER.is_jumping = false
+        PLAYER.is_falling = false
         PLAYER.max_speed = PLAYER.is_crouching ? PLAYER.crouch_max_speed : PLAYER.default_max_speed
     } else {
         PLAYER.on_ground = false
